@@ -37,6 +37,14 @@ HAVING COUNT(d.id) > 1
 
 -- 7 
 
+SELECT COUNT(*) as que_un_plat
+FROM (
+    SELECT chef_id
+    from dishes
+    GROUP by chef_id
+    HAVING count(*) = 1
+) as pas_productif
+
 -- 8 
 
 SELECT r.cuisine_type, COUNT(d.id) AS dish_count

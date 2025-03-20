@@ -16,8 +16,8 @@ CREATE TABLE livre (
 );
 
 CREATE TABLE emprunt (
-    id_adherent INT NOT NULL REFERENCES adherent(id),
-    isbn INT NOT NULL REFERENCES livre(isbn),
+    id_adherent INT NOT NULL REFERENCES adherent(id) ON DELETE CASCADE,
+    isbn INT NOT NULL REFERENCES livre(isbn) ON DELETE CASCADE,
     PRIMARY KEY (isbn, id_adherent),
     date_emprunt DATE NOT NULL,
     date_retour DATE

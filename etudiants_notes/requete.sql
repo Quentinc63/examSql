@@ -109,4 +109,10 @@ WHERE id = 4
 -- ca me paraitrait legitime d'en mettre un ici pour recupéré le plus vite possible même si ca augmente leurs poids
 -- Sinon en regle general j'ai tendance a faire des recherche par un id 
 
+-- 10
+
+DROP DATABASE bibliotheques;
+
+-- Apres pour le rgpd je sais pas du tout 
+
 

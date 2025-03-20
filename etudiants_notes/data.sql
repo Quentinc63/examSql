@@ -5,7 +5,7 @@ CREATE TABLE adherent (
     nom VARCHAR(255),
     adresse VARCHAR(255),
     date_inscription DATE NOT NULL,
-    a_surveiller VARCHAR(255) 
+    a_surveiller BOOLEAN not NULL 
 );
 
 CREATE TABLE livre (

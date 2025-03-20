@@ -14,12 +14,13 @@ SHOW GRANTS FOR 'bibliothecaire'@'localhost';
 
 -- 3 
 
-INSERT INTO adherent (nom, adresse,date_inscription)
+INSERT INTO adherent (nom, adresse, date_inscription, a_surveiller)
 VALUES 
-( 'austen jane', 'rue de la bourboule coudes 63114', '2017-02-21'),
-( 'dickens charles', 'rue de la folie cebazat 63118', '2014-05-11'),
-( 'verne jules', 'rue de la maladie clermont 63000', '2017-02-21'),
-( 'shelley marry', 'rue de la folie cebazat 63118', '2014-05-11');
+( 'austen jane', 'rue de la bourboule coudes 63114', '2017-02-21', FALSE),
+( 'dickens charles', 'rue de la folie cebazat 63118', '2014-05-11', FALSE),
+( 'verne jules', 'rue de la maladie clermont 63000', '2017-02-21', FALSE),
+( 'shelley marry', 'rue de la folie cebazat 63118', '2014-05-11', FALSE);
+
 
 INSERT INTO livre (isbn, titre, annee_publication, disponible)
 VALUES 
@@ -67,10 +68,45 @@ SELECT * FROM les_jours_de_retard
 
 -- 6
 
+DELIMITER //
+CREATE TRIGGER update_livre_disponible
+AFTER UPDATE ON emprunt
+FOR EACH ROW
+BEGIN
+    IF NEW.date_retour IS NOT NULL THEN
+        UPDATE livre
+        SET disponible = TRUE
+        WHERE isbn = NEW.isbn;
+    END IF;
+END//
+
 -- 7 
+
+DELIMITER //
+
+CREATE PROCEDURE surveiller_retards()
+BEGIN
+    UPDATE adherent a
+    JOIN emprunt e ON a.id = e.id_adherent
+    SET a.a_surveiller = TRUE
+    WHERE e.date_retour IS NULL
+    AND DATEDIFF(CURDATE(), e.date_emprunt) > 30;
+END //
+
+DELIMITER ;
+
+CALL surveiller_retards();
 
 
 -- 8 
 
 DELETE FROM adherent 
 WHERE id = 4
+
+-- 9 
+
+-- Dans le cas de nos requetes au dessus et du nombre de fois ou on utilise date_emprunt dans la table emprunts
+-- ca me paraitrait legitime d'en mettre un ici pour recupéré le plus vite possible même si ca augmente leurs poids
+-- Sinon en regle general j'ai tendance a faire des recherche par un id 
+
+
